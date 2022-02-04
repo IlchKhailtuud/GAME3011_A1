@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TitleManager : MonoBehaviour
+public class TileManager : MonoBehaviour
 {
-    public static TitleManager Instance;
+    public static TileManager Instance;
 
     private void Awake()
     {
