@@ -9,22 +9,25 @@ using UnityEngine.UI;
 public class Tile : MonoBehaviour
 {
     private int row;
+
+    public int Row
+    {
+        get => row;
+        set => row = value;
+    }
+
+    public int Col
+    {
+        get => col;
+        set => col = value;
+    }
+
     private int col;
     private int tileValue;
     private Color tileColor;
     private bool isHidden;
     private TileType type = TileType.MIN;
     
-    public int Row
-    {
-        get => row;
-    }
-
-    public int Col
-    {
-        get => col;
-    }
-
     public int Value
     {
         get => tileValue;
@@ -41,6 +44,12 @@ public class Tile : MonoBehaviour
     {
         get => isHidden;
         set => isHidden = value;
+    }
+    
+    public TileType Type
+    {
+        get => type;
+        set => type = value;
     }
 
     private void Start()
@@ -72,7 +81,7 @@ public class Tile : MonoBehaviour
         }
     }
 
-    public void Reveal()
+    public void RevealTile()
     {
         isHidden = false;
         GetComponent<Image>().color = tileColor;
