@@ -55,23 +55,6 @@ public class TileManager : MonoBehaviour
     
     private void InitTileMap()
     {
-        // while (maxValueTileNum > 0)
-        // {
-        //     int row = UnityEngine.Random.Range(0, rowNum + 1);
-        //     int col = UnityEngine.Random.Range(0, colNum + 1);
-        //
-        //     Tile tile = GetTile(row, col);
-        //     Console.WriteLine(row + " , " + col);
-        //     
-        //     if (tile != null && tile.Type != TileType.MAX)
-        //     {
-        //         tile.Type = TileType.MAX;
-        //         SetTileValue(tile.Row - 2, tile.Col - 2, 5, TileType.QUARTER);
-        //     }
-        //
-        //     --maxValueTileNum;
-        // }
-        
         for (int i = 0; i < maxValueTileNum; i++)
         {
             int row = UnityEngine.Random.Range(0, rowNum + 1);
@@ -118,7 +101,7 @@ public class TileManager : MonoBehaviour
     {
         for (int col = Col; col < Col + length; col++)
         {
-            for (int row = 0;  row < Row + length; row++)
+            for (int row = Row;  row < Row + length; row++)
             {
                 Tile t = GetTile(row, col);
                 t.RevealTile();

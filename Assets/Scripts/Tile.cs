@@ -142,14 +142,6 @@ public class Tile : MonoBehaviour
                     SetTileInfo();
                     RevealTile();
                 }
-                
-                if (GameManager.Instance.ExtractCount <= 0)
-                {
-                    if (GameManager.Instance.Score < 800)
-                        GameManager.Instance.IsGameOver = true;
-                    else
-                        GameManager.Instance.IsGameWin = true;
-                }
             }
         }
     }

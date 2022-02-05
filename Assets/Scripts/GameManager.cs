@@ -63,6 +63,14 @@ public class GameManager : MonoBehaviour
     
     private void Update()
     {
+        if (ExtractCount <= 0)
+        {
+            if (Score < 800)
+                Instance.IsGameOver = true;
+            else
+                Instance.IsGameWin = true;
+        }
+        
         if (isGameOver)
         {
             Debug.Log("over");
@@ -91,7 +99,14 @@ public class GameManager : MonoBehaviour
 
     public void OnPointerClick()
     {
-        isScanMode = isScanMode ? false : true;
-        UpdateMode();
+        if (!isGameOver || isGameWin)
+        {
+            if (isScanMode)
+                isScanMode = false;
+            else
+                isScanMode = true;
+            
+            UpdateMode();
+        }
     }
 }
