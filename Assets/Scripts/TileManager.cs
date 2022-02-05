@@ -14,22 +14,45 @@ public class TileManager : MonoBehaviour
     
     [SerializeField] private GameObject tilePre;
 
-    private int rowNum;
-    private int colNum;
-    private int maxValueTileNum;
+    public int rowNum = 32;
+    public int colNum = 32;
+    public int maxValueTileNum = 10;
     
     private List<GameObject> tiles = new List<GameObject>();
 
     private void Start()
     {
-        rowNum = 32;
-        colNum = 32;
-        maxValueTileNum = 10;
-        
         InstantiateTiles();
         InitTileMap();
     }
+    
+    private void InstantiateTiles()
+    { 
+        for (int col = 0; col < colNum; col++)
+        {
+            for (int row = 0; row < rowNum; row++)
+            {
+                GameObject go = Instantiate(tilePre, transform);
+                Tile tile = go.GetComponent<Tile>();
+                tile.Row = row;
+                tile.Col = col;
+                tiles.Add(go);
+            }
+        }
+    }
+    
+    private Tile GetTile(int row, int col)
+    {
+        foreach (var go in tiles)
+        {
+            Tile tile = go.GetComponent<Tile>();
 
+            if (tile.Row == row && tile.Col == col)
+                return tile; 
+        }
+        return null;
+    }
+    
     private void InitTileMap()
     {
         // while (maxValueTileNum > 0)
@@ -38,7 +61,8 @@ public class TileManager : MonoBehaviour
         //     int col = UnityEngine.Random.Range(0, colNum + 1);
         //
         //     Tile tile = GetTile(row, col);
-        //
+        //     Console.WriteLine(row + " , " + col);
+        //     
         //     if (tile != null && tile.Type != TileType.MAX)
         //     {
         //         tile.Type = TileType.MAX;
@@ -47,16 +71,17 @@ public class TileManager : MonoBehaviour
         //
         //     --maxValueTileNum;
         // }
-
+        
         for (int i = 0; i < maxValueTileNum; i++)
         {
             int row = UnityEngine.Random.Range(0, rowNum + 1);
             int col = UnityEngine.Random.Range(0, colNum + 1);
-
+        
             Tile tile = GetTile(row, col);
-
+            
             if (tile != null && tile.Type != TileType.MAX)
             {
+                Debug.Log(row + " , " + col);
                 tile.Type = TileType.MAX;
                 SetTileValue(tile.Row - 2, tile.Col - 2, 5, TileType.QUARTER);
             }
@@ -72,36 +97,7 @@ public class TileManager : MonoBehaviour
             }
         }
     }
-
-    private Tile GetTile(int row, int col)
-    {
-        foreach (var go in tiles)
-        {
-            Tile tile = go.GetComponent<Tile>();
-
-            if (tile.Row == row && tile.Col == col)
-                return tile; 
-        }
-        return null;
-    }
-
-    private void InstantiateTiles()
-    {
-        for (int i = 0; i < colNum; i++)
-        {
-            for (int j = 0; j < rowNum; j++)
-            {
-                GameObject tile = Instantiate(tilePre, transform);
-                if (!tile)
-                {
-                    tile.GetComponent<Tile>().Col = colNum;
-                    tile.GetComponent<Tile>().Row = rowNum;
-                    tiles.Add(tile);
-                }
-            }
-        }
-    }
-
+    
     private void SetTileValue(int Row, int Col, int length, TileType type)
     {
         for (int col = Col; col < Col + length; col++)
@@ -118,7 +114,7 @@ public class TileManager : MonoBehaviour
         }
     }
 
-    private void RevealTiles(int Row, int Col, int length)
+    public void RevealTiles(int Row, int Col, int length)
     {
         for (int col = Col; col < Col + length; col++)
         {
