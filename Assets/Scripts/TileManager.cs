@@ -13,10 +13,10 @@ public class TileManager : MonoBehaviour
     }
     
     [SerializeField] private GameObject tilePre;
-
-    public int rowNum = 32;
-    public int colNum = 32;
-    public int maxValueTileNum = 10;
+    [SerializeField] private int maxValueTileNum;
+    
+    [SerializeField] private int rowNum = 32;
+    [SerializeField] private int colNum = 32;
     
     private List<GameObject> tiles = new List<GameObject>();
 
@@ -33,6 +33,7 @@ public class TileManager : MonoBehaviour
             for (int row = 0; row < rowNum; row++)
             {
                 GameObject go = Instantiate(tilePre, transform);
+                
                 Tile tile = go.GetComponent<Tile>();
                 tile.Row = row;
                 tile.Col = col;
@@ -59,24 +60,13 @@ public class TileManager : MonoBehaviour
         {
             int row = UnityEngine.Random.Range(0, rowNum + 1);
             int col = UnityEngine.Random.Range(0, colNum + 1);
-        
-            Tile tile = GetTile(row, col);
             
-            if (tile != null && tile.Type != TileType.MAX)
+            Tile tile = GetTile(row, col);
+            if (tile != null && tile.type != TileType.MAX)
             {
-                Debug.Log(row + " , " + col);
                 tile.Type = TileType.MAX;
                 SetTileValue(tile.Row - 2, tile.Col - 2, 5, TileType.QUARTER);
-            }
-        }
-        
-        foreach (var go in tiles)
-        {
-            Tile t = go.GetComponent<Tile>();
-
-            if (t.Type == TileType.MAX)
-            {
-                SetTileValue(t.Row -1, t.Col -1, 3, TileType.HALF);
+                SetTileValue(tile.Row -1, tile.Col -1, 3, TileType.HALF);
             }
         }
     }
@@ -97,6 +87,26 @@ public class TileManager : MonoBehaviour
         }
     }
 
+    public void DegradeTileValue(int Row, int Col, int oriRow, int oriCol, int length)
+    {
+        for (int col = Col; col < Col + length; col++)
+        {
+            for (int row = Row; row < Row + length; row++)
+            {
+                if (col != oriCol && row != oriRow)
+                {
+                    Tile tile = GetTile(row, col);
+                    if (tile != null && tile.Type != TileType.MIN)
+                    {
+                        tile.Type -= 1;
+                        tile.SetTileInfo();
+                        tile.RevealTile();
+                    }
+                }
+            }
+        }
+    }
+    
     public void RevealTiles(int Row, int Col, int length)
     {
         for (int col = Col; col < Col + length; col++)
@@ -104,7 +114,8 @@ public class TileManager : MonoBehaviour
             for (int row = Row;  row < Row + length; row++)
             {
                 Tile t = GetTile(row, col);
-                t.RevealTile();
+                if (t != null)
+                    t.RevealTile();
             }
         }
     }

@@ -54,11 +54,11 @@ public class Tile : MonoBehaviour
     private void Start()
     {
         SetTileInfo();
-        if (!isHidden)
+        if (!isHidden) 
             GetComponent<Image>().color = tileColor;
     }
 
-    private void SetTileInfo()
+    public void SetTileInfo()
     {
         switch (type)
         {
@@ -78,6 +78,8 @@ public class Tile : MonoBehaviour
                 tileValue = 400;
                 tileColor = Color.red;
                 break;
+            default:
+                break;
         }
     }
 
@@ -89,41 +91,12 @@ public class Tile : MonoBehaviour
 
     public void OnPointerClicked()
     {
-        // if (GameManager.Instance.IsScanMode && GameManager.Instance.ScanCount > 0)
-        // {
-        //     TileManager.Instance.RevealTiles(row - 1, col - 1, 3);
-        //     --GameManager.Instance.ScanCount;
-        //     GameManager.Instance.UpdateUI();
-        // }
-        // else if (!GameManager.Instance.IsScanMode && GameManager.Instance.ExtractCount > 0)
-        // {
-        //     RevealTile();
-        //     GameManager.Instance.Score += tileValue;
-        //
-        //     if (type != TileType.MIN)
-        //     {
-        //         type -= 1;
-        //         SetTileInfo();
-        //         RevealTile();
-        //     }
-        //
-        //     --GameManager.Instance.ExtractCount;
-        //     GameManager.Instance.UpdateUI();
-        //     
-        //     if (GameManager.Instance.ExtractCount <= 0)
-        //     {
-        //         if (GameManager.Instance.Score < 800)
-        //             GameManager.Instance.IsGameOver = true;
-        //         else
-        //             GameManager.Instance.IsGameWin = true;
-        //     }
-        // }
         if (GameManager.Instance.IsScanMode)
         {
             if (GameManager.Instance.ScanCount > 0)
             {
                 TileManager.Instance.RevealTiles(row - 1, col - 1, 3);
-                --GameManager.Instance.ScanCount;
+                GameManager.Instance.ScanCount--;
                 GameManager.Instance.UpdateUI();
             }
         }
@@ -131,16 +104,19 @@ public class Tile : MonoBehaviour
         {
             if (GameManager.Instance.ExtractCount > 0)
             {
-                RevealTile();
-                --GameManager.Instance.ExtractCount;
+                //RevealTile();
+                GameManager.Instance.ExtractCount--;
                 GameManager.Instance.Score += tileValue;
                 GameManager.Instance.UpdateUI();
                 
                 if (type != TileType.MIN)
                 {
-                    type -= 1;
+                    type = TileType.MIN;
                     SetTileInfo();
                     RevealTile();
+                    
+                    TileManager.Instance.DegradeTileValue(row - 2, col - 2, row, col, 5);
+                    TileManager.Instance.DegradeTileValue(row - 1, col - 1, row, col, 3);
                 }
             }
         }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -12,6 +13,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text scoreText;
     [SerializeField] private Text extractCountsText;
     [SerializeField] private Text scanCountsText;
+    [SerializeField] private int winScore;
     
     private int score = 0;
     private int extractCount = 3;
@@ -44,18 +46,6 @@ public class GameManager : MonoBehaviour
         set => isScanMode = value;
     }
     
-    public bool IsGameOver
-    {
-        get => isGameOver;
-        set => isGameOver = value;
-    }
-    
-    public bool IsGameWin
-    {
-        get => isGameWin;
-        set => isGameWin = value;
-    }
-    
     private void Awake()
     {
         Instance = this;
@@ -65,20 +55,20 @@ public class GameManager : MonoBehaviour
     {
         if (ExtractCount <= 0)
         {
-            if (Score < 800)
-                Instance.IsGameOver = true;
+            if (Score < winScore)
+                isGameOver = true;
             else
-                Instance.IsGameWin = true;
+                isGameWin = true;
         }
         
         if (isGameOver)
         {
-            Debug.Log("over");
+            SceneManager.LoadScene("lose");
         }
 
         if (isGameWin)
         {
-            Debug.Log("win");
+            SceneManager.LoadScene("win");
         }
     }
 
@@ -97,7 +87,7 @@ public class GameManager : MonoBehaviour
         extractCountsText.text = "Extracts: " + extractCount;
     }
 
-    public void OnPointerClick()
+    public void OnModeClick()
     {
         if (!isGameOver || isGameWin)
         {
@@ -108,5 +98,10 @@ public class GameManager : MonoBehaviour
             
             UpdateMode();
         }
+    }
+
+    public void OnResetClick()
+    {
+        SceneManager.LoadScene("game");
     }
 }
